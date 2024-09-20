@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  frontend:
+    image: svelte-app
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - PORT=5173
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/static:/app/static
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./frontend/svelte.config.js:/app/svelte.config.js
+      - ./frontend/package.json:/app/package.json
+    networks:
+    - external
+  demo-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000 
+    volumes:
+      - ./backend/api:/src
+    environment:
+      - ENVIRON
+    networks:
+    - external
+networks:
+  external:
+    driver: bridge
