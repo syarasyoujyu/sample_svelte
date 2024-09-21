@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-@app.get("/api")
+@app.get("/upload")
 def api():
     data = {
         "message": "Hello, FastAPI",
@@ -14,3 +14,4 @@ def api():
 
 # staticディレクトリにあるindex.htmlを使う (Svelte用)
 #app.mount("/", StaticFiles(directory="../../client/static", html=True), name="static")
+#数百キロバイトなら問題ない（～１０MB）ならOK

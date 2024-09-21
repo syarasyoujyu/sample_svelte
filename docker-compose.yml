@@ -21,16 +21,14 @@ services:
     - external
   demo-api:
     build:
-      context: ./backend
+      context: ./back
       dockerfile: Dockerfile
     ports:
-      - 8000:8000 
+      - "8000:8000"
     volumes:
-      - ./backend/api:/src
-    environment:
-      - ENVIRON
+      - ./back:/app
     networks:
-    - external
+      - external
 networks:
   external:
     driver: bridge
