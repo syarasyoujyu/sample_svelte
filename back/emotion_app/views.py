@@ -1,20 +1,16 @@
 import tempfile
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-import whisper
-from transformers import pipeline
 # Importing other libraries
 import joblib
 import numpy as np
-import sys
-import os
 
 # Audio Imports
 import pyaudio
 import wave
 import librosa
 # Opening Model
-MLP = joblib.load("back/emotion_app/assets/MLP.joblib")
+MLP = joblib.load("C:/Users/yoko1/workspace/sample_svelte/back/emotion_app/assets/MLP.joblib")
 
 # Audio Capture Parameters
 CHUNKSIZE = 1024
@@ -79,11 +75,7 @@ def get_features(filename: str):
     x = []
     x.append(data)
     return np.array(x)
-# Whisperモデルのロード
-model = whisper.load_model('base')  # 'tiny', 'small', 'medium', 'large'から選択可能
 
-# 感情分析モデルのロード
-sentiment_model = pipeline('sentiment-analysis', model='daigo/bert-base-japanese-sentiment')
 @csrf_exempt
 def transcribe_audio(request):
     if request.method == 'POST':
@@ -97,12 +89,6 @@ def transcribe_audio(request):
                 temp_file.write(chunk)
             temp_file_path = temp_file.name
 
-        # Whisperで音声をテキストに変換
-        try:
-            result = model.transcribe(temp_file_path, language='ja')
-            text = result.get('text')
-        except Exception as e:
-            return JsonResponse({'error': f'音声認識中にエラーが発生しました: {str(e)}'}, status=500)
 
         # 感情分析の実行
         try:
@@ -113,6 +99,6 @@ def transcribe_audio(request):
             # 一時ファイルの削除
             temp_file.close()
 
-        return JsonResponse({'text': text, 'emotion': emotion})
+        return JsonResponse({'emotion': emotion})
     else:
         return JsonResponse({'error': '無効なリクエストメソッドです。'}, status=405)

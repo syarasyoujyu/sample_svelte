@@ -1,12 +1,8 @@
-Django>=3.2
-git+https://github.com/openai/whisper.git
-torch>=1.7.1
-pydub
+Django
+torch
+numpy
 transformers
 joblib
-numpy
-sys
-os
 pyaudio
-wave
 librosa
+git+https://github.com/openai/whisper.git
